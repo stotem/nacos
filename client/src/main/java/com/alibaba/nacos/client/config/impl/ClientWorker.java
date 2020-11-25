@@ -656,13 +656,13 @@ public class ClientWorker implements Closeable {
                 }
                 inInitializingCacheList.clear();
                 
-                executorService.execute(this);
+                //executorService.execute(this);
                 
             } catch (Throwable e) {
                 
                 // If the rotation training task is abnormal, the next execution time of the task will be punished
                 LOGGER.error("longPolling error : ", e);
-                executorService.schedule(this, taskPenaltyTime, TimeUnit.MILLISECONDS);
+                //executorService.schedule(this, taskPenaltyTime, TimeUnit.MILLISECONDS);
             }
         }
     }
