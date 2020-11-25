@@ -553,6 +553,12 @@ public class ClientWorker implements Closeable {
                         return t;
                     }
                 });
+        Long chkConfigInterval = 10L;
+        try {
+            chkConfigInterval = Long.valueOf(properties.getProperty("chkConfigInterval", "10"));
+        }catch (Exception e) {
+            LOGGER.error("[" + agent.getName() + "] parameters chkConfigInterval is error", e);
+        }
         
         this.executor.scheduleWithFixedDelay(new Runnable() {
             @Override
@@ -563,7 +569,7 @@ public class ClientWorker implements Closeable {
                     LOGGER.error("[" + agent.getName() + "] [sub-check] rotate check error", e);
                 }
             }
-        }, 1L, 10L, TimeUnit.MILLISECONDS);
+        }, 1L, chkConfigInterval, TimeUnit.MILLISECONDS);
     }
     
     private void init(Properties properties) {
@@ -656,13 +662,13 @@ public class ClientWorker implements Closeable {
                 }
                 inInitializingCacheList.clear();
                 
-                executorService.execute(this);
+               // executorService.execute(this);
                 
             } catch (Throwable e) {
                 
                 // If the rotation training task is abnormal, the next execution time of the task will be punished
                 LOGGER.error("longPolling error : ", e);
-                executorService.schedule(this, taskPenaltyTime, TimeUnit.MILLISECONDS);
+              // executorService.schedule(this, taskPenaltyTime, TimeUnit.MILLISECONDS);
             }
         }
     }
